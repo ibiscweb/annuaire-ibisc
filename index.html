@@ -285,6 +285,21 @@ tbody tr:hover td{background:#fafaf8}
   </style>
 </head>
 <body>
+<script>
+(function(){
+  var pwd = sessionStorage.getItem('ibisc_auth');
+  if(pwd !== '1') {
+    var p = prompt('Annuaire IBISC — Mot de passe requis :');
+    if(p !== 'annuaireibisc') {
+      document.write('<div style="font-family:sans-serif;text-align:center;margin-top:20vh;color:#666"><h2>Accès refusé</h2><p>Mot de passe incorrect.</p><button onclick="location.reload()">Réessayer</button></div>');
+      document.close();
+      return;
+    }
+    sessionStorage.setItem('ibisc_auth','1');
+  }
+})();
+</script>
+
 
 <header>
   <div class="logo-sq">IB</div>
