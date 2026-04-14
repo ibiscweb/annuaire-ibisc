@@ -159,17 +159,26 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:14
 </head>
 <body>
 <script>
-(function(){
-  var pwd=sessionStorage.getItem('ibisc_pub_auth');
-  if(pwd!=='1'){
-    var p=prompt('IBISC Publications — Mot de passe :');
-    if(p!=='annuaireibisc'){
-      document.write('<div style="font-family:sans-serif;text-align:center;margin-top:20vh;color:#aaa"><h2>Accès refusé</h2><button onclick="location.reload()">Réessayer</button></div>');
-      document.close();return;
+  (function() {
+    if (sessionStorage.getItem('ibisc_auth') === '1') return;
+
+    const pwd = prompt("Annuaire IBISC\n\nMot de passe requis :", "");
+
+    if (pwd === null || pwd.trim() !== "intranetibisc") {
+      document.body.innerHTML = `
+            <div style="height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#f5f4f0;font-family:system-ui,sans-serif;">
+                <h1 style="color:#c62828;margin-bottom:16px;">Accès refusé</h1>
+                <p style="font-size:17px;color:#555;margin-bottom:30px;">Le mot de passe saisi est incorrect ou l'opération a été annulée.</p>
+                <button onclick="location.reload()"
+                        style="padding:14px 32px;font-size:16px;background:#0044cc;color:white;border:none;border-radius:8px;cursor:pointer;">
+                    Réessayer
+                </button>
+            </div>`;
+      return;
     }
-    sessionStorage.setItem('ibisc_pub_auth','1');
-  }
-})();
+
+    sessionStorage.setItem('ibisc_auth', '1');
+  })();
 </script>
 
 <header class="hdr">
