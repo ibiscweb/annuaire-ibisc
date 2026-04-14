@@ -334,23 +334,23 @@ var fYear = 'all', fTeam = 'all', fQ = 'all', fTop10 = false;
 
 function buildArticleFilters() {
   // Années
-  var yHtml = '<button class="fc on" onclick="setArtFilter('year','all',this)">Toutes</button>';
+  var yHtml = `<button class="fc on" onclick="setArtFilter('year','all',this)">Toutes</button>`;
   YEARS.forEach(function(y){
-    yHtml += '<button class="fc" onclick="setArtFilter('year','+y+',this)">'+y+'</button>';
+    yHtml += `<button class="fc" onclick="setArtFilter('year','${y}',this)">${y}</button>`;
   });
   document.getElementById('year-filters').innerHTML = yHtml;
 
   // Équipes
-  var tHtml = '<button class="fc on" onclick="setArtFilter('team','all',this)">Toutes</button>';
+  var tHtml = '<button class="fc on" onclick="setArtFilter(\'team\',\'all\',this)">Toutes</button>';
   TEAMS.forEach(function(t){
-    tHtml += '<button class="fc" onclick="setArtFilter('team',''+t+'',this)">'+t+'</button>';
+    tHtml += '<button class="fc" onclick="setArtFilter(\'team\',\'' + t + '\',this)">' + t + '</button>';
   });
   document.getElementById('team-filters').innerHTML = tHtml;
 
   // Quartiles
-  var qHtml = '<button class="fc on" onclick="setArtFilter('q','all',this)">Tous</button>';
+  var qHtml = '<button class="fc on" onclick="setArtFilter(\'q\',\'all\',this)">Tous</button>';
   ['Q1','Q2','Q3'].forEach(function(q){
-    qHtml += '<button class="fc" onclick="setArtFilter('q',''+q+'',this)">'+q+'</button>';
+    qHtml += `<button class="fc" onclick="setArtFilter('q','${q}',this)">${q}</button>`;
   });
   document.getElementById('q-filters').innerHTML = qHtml;
 }
@@ -460,9 +460,9 @@ function buildTop10() {
   }).join('');
 
   // Filtres équipes
-  var tHtml = '<button class="fc on" onclick="setTop10Team('all',this)">Toutes équipes</button>';
+  var tHtml = `<button class="fc on" onclick="setTop10Team('all',this)">Toutes équipes</button>`;
   Object.keys(teams_set).sort().forEach(function(t){
-    tHtml += '<button class="fc" onclick="setTop10Team(''+t+'',this)">'+t+'</button>';
+    tHtml += `<button class="fc" onclick="setTop10Team('${t}',this)">${t}</button>`;
   });
   document.getElementById('top10-team-filters').innerHTML = tHtml;
   filterJournals();
