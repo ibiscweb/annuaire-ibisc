@@ -50,7 +50,7 @@ tr:last-child td{border:none}
 tbody tr{cursor:pointer;transition:background .1s}
 tbody tr:hover td{background:#fafaf8}
 .mc{display:flex;align-items:center;gap:9px}
-.av{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:700;flex-shrink:0}
+.av{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:700;flex-shrink:0}.av-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-right:6px;display:inline-block}
 .mn{font-weight:500;font-size:13px}
 .tt{display:inline-block;padding:2px 7px;border-radius:99px;font-size:10px;font-weight:500;font-family:var(--mono);color:#fff;margin:1px}
 .tt-AROBAS{background:var(--arobas)}.tt-COSMO{background:var(--cosmo)}.tt-IRA2{background:var(--ira2)}.tt-SIAM{background:var(--siam)}.tt-none{background:var(--muted)}
@@ -253,7 +253,7 @@ tbody tr:hover td{background:#fafaf8}
     position:relative; overflow:hidden;
   }
   .photo-upload-area:hover { border-color:var(--accent); background:#f8faff; }
-  .photo-upload-area input[type=file] { position:absolute; inset:0; opacity:0; cursor:pointer; }
+  .photo-upload-area input[type=file] { display:none; }
   .photo-preview { width:80px; height:80px; border-radius:50%; object-fit:cover;
     margin:0 auto 10px; display:block; border:3px solid var(--border); }
   .photo-placeholder { width:80px; height:80px; border-radius:50%; background:#e8edf3;
@@ -349,10 +349,9 @@ tbody tr:hover td{background:#fafaf8}
     <table>
       <thead><tr>
         <th data-col="nom" class="sorted">Nom <span class="sa">&#8595;</span></th>
+        <th data-col="prenom">Pr&#233;nom <span class="sa">&#8597;</span></th>
         <th data-col="team">&#201;quipe <span class="sa">&#8597;</span></th>
         <th data-col="type">Statut <span class="sa">&#8597;</span></th>
-        <th data-col="since">Depuis <span class="sa">&#8597;</span></th>
-        <th>HAL</th>
       </tr></thead>
       <tbody id="tbody"></tbody>
     </table>
@@ -408,12 +407,12 @@ tbody tr:hover td{background:#fafaf8}
     <!-- Photo -->
     <div class="edit-section">
       <h4>&#128247; Photo</h4>
-      <div class="photo-upload-area" id="photo-drop" onclick="document.getElementById('photo-file').click()">
-        <input type="file" id="photo-file" accept="image/*" onchange="previewPhoto(this)">
+      <label class="photo-upload-area" id="photo-drop" for="photo-file">
+        <input type="file" id="photo-file" accept="image/*" style="display:none" onchange="previewPhoto(this)">
         <div class="photo-placeholder" id="photo-placeholder">&#128100;</div>
         <img id="photo-preview-img" class="photo-preview" style="display:none" alt="Photo">
         <div class="photo-hint">Cliquez ou déposez une image (JPG, PNG · max 2 Mo)<br>Format recommandé : carré 400×400 px</div>
-      </div>
+      </label>
     </div>
 
     <!-- Présence en ligne -->
@@ -536,7 +535,8 @@ function applyFilters(){
   var q=query.toLowerCase().trim();
   var rows=[];
   for(var i=0;i<M.length;i++){
-    var m=M[i];var ts=m.teams||[];
+    var m=M[i];
+    if(!m.type)continue;var ts=m.teams||[];
     if(fTeam!=="ALL"){var ok=false;for(var j=0;j<ts.length;j++){if(ts[j]===fTeam){ok=true;break;}}if(!ok)continue;}
     if(fType!=="ALL"){var t=m.type||"";if(fType==="EC"&&EC.indexOf(t)===-1)continue;if(fType==="PhD"&&t!=="PhD")continue;if(fType==="OTHER"&&(EC.indexOf(t)!==-1||t==="PhD"))continue;}
     if(q&&(m.nom||"").toLowerCase().indexOf(q)===-1&&(m.prenom||"").toLowerCase().indexOf(q)===-1)continue;
@@ -562,18 +562,9 @@ function applyFilters(){
     if(ts.length){for(var j=0;j<ts.length;j++)tHtml+='<span class="tt tt-'+ts[j]+'">'+ts[j]+'</span>';}
     else tHtml='<span class="tt tt-none">&#8212;</span>';
     var hd=m.hdr?'<span class="hdr-dot" title="HDR"></span>':"";
-    var tblLinks='<div class="tbl-links">';
-    if(m.hal&&m.hal_reliable){tblLinks+='<a class="tbl-link-dot dot-hal" href="'+e(m.hal)+'" target="_blank" onclick="event.stopPropagation()" title="HAL">H</a>';}
-    else if(m.hal&&m.prenom&&m.nom){tblLinks+='<a class="tbl-link-dot dot-hal" href="'+e(m.hal)+'" target="_blank" onclick="event.stopPropagation()" title="Recherche HAL (non vérifié)" style="opacity:.55">H?</a>';}
-    if(m.scholar){tblLinks+='<a class="tbl-link-dot dot-gs" href="'+e(m.scholar)+'" target="_blank" onclick="event.stopPropagation()" title="Google Scholar">G</a>';}
-    if(m.linkedin){tblLinks+='<a class="tbl-link-dot dot-li" href="'+e(m.linkedin)+'" target="_blank" onclick="event.stopPropagation()" title="LinkedIn">in</a>';}
-    if(m.researchgate){tblLinks+='<a class="tbl-link-dot dot-rg" href="'+e(m.researchgate)+'" target="_blank" onclick="event.stopPropagation()" title="ResearchGate">RG</a>';}
-    if(m.web){tblLinks+='<a class="tbl-link-dot dot-web" href="'+e(m.web)+'" target="_blank" onclick="event.stopPropagation()" title="Site web">⎋</a>';}
-    tblLinks+='</div>';
-    var hal=tblLinks;
-    html+='<tr data-slug="'+e(m.slug)+'" onclick="goM(this)">'
-      +'<td><div class="mc"><div class="av" style="background:'+col+'20;color:'+col+'">'+ini(m.nom,m.prenom)+'</div>'
-      +'<div class="mn">'+e(m.prenom)+' '+e(m.nom)+(function(){
+    // hal/email dots supprimés (retour Ishiomin)
+
+    html+='<tr data-slug="'+e(m.slug)+'" onclick="goM(this)">'+'<td><div class="mc"><div class="av-dot" style="background:'+col+'"></div><span class="mn">'+e(m.nom)+(function(){
         if(m.ibisc_role==='DirectorLab') return ' <span class="rbadge rbadge-dir">Dir.</span>';
         if(m.ibisc_role==='AssistantDirectorLab') return ' <span class="rbadge rbadge-adir">Dir. adj.</span>';
         var tr=m.team_role||{};
@@ -584,11 +575,8 @@ function applyFilters(){
         if(m.tasks&&m.tasks.length)
           return ' <span class="rbadge rbadge-task">Mission</span>';
         return '';
-      })()+'</div></div></td>'
-      +'<td>'+tHtml+'</td>'
-      +'<td class="pos">'+e(m.label||m.type||"")+hd+'</td>'
-      +'<td class="since">'+(m.since?m.since.slice(0,4):"&#8212;")+'</td>'
-      +'<td>'+hal+'</td></tr>';
+      })()+'</div></td>'
+      +'<td class="prenom">'+e(m.prenom||'')+'</td>'+'<td>'+tHtml+'</td>'+'<td class="pos">'+e(m.label||m.type||"")+hd+'</td></tr>';
   }
   tbody.innerHTML=html;
 }
@@ -884,6 +872,30 @@ function showEditForm() {
   document.getElementById('view-list').style.display   = 'none';
   document.getElementById('view-member').style.display = 'none';
   document.getElementById('view-edit').style.display   = 'block';
+  // Drag & drop sur le label photo
+  (function(){
+    var lbl = document.getElementById('photo-drop');
+    if(lbl._ddInit) return; lbl._ddInit = true;
+    lbl.addEventListener('dragover', function(ev){
+      ev.preventDefault(); lbl.style.borderColor='var(--accent)'; lbl.style.background='#f0f4ff';
+    });
+    lbl.addEventListener('dragleave', function(){
+      lbl.style.borderColor=''; lbl.style.background='';
+    });
+    lbl.addEventListener('drop', function(ev){
+      ev.preventDefault(); lbl.style.borderColor=''; lbl.style.background='';
+      var files = ev.dataTransfer.files;
+      if(files && files[0] && files[0].type.startsWith('image/')){
+        var inp = document.getElementById('photo-file');
+        // Créer un DataTransfer pour affecter les fichiers à l'input
+        try {
+          var dt = new DataTransfer(); dt.items.add(files[0]);
+          inp.files = dt.files;
+        } catch(e){}
+        previewPhoto(inp);
+      }
+    });
+  })();
   document.getElementById('edit-subtitle').textContent = m.prenom + ' ' + m.nom + ' — ' + (m.label || m.type || '');
 
   // Pré-remplir les champs
@@ -968,6 +980,7 @@ function updateProgress() {
   document.getElementById('edit-progress-bar').style.width  = pct + '%';
   document.getElementById('edit-progress-label').textContent = 'Complétude : ' + filled + '/' + total + ' champs renseignés (' + pct + '%)';
 }
+
 
 function submitEdit() {
   var m = EDIT_MEMBER;
