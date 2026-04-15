@@ -253,7 +253,7 @@ tbody tr:hover td{background:#fafaf8}
     position:relative; overflow:hidden;
   }
   .photo-upload-area:hover { border-color:var(--accent); background:#f8faff; }
-  .photo-upload-area input[type=file] { position:absolute; inset:0; opacity:0; cursor:pointer; }
+  /* input photo géré via JS */
   .photo-preview { width:80px; height:80px; border-radius:50%; object-fit:cover;
     margin:0 auto 10px; display:block; border:3px solid var(--border); }
   .photo-placeholder { width:80px; height:80px; border-radius:50%; background:#e8edf3;
@@ -408,8 +408,8 @@ tbody tr:hover td{background:#fafaf8}
     <!-- Photo -->
     <div class="edit-section">
       <h4>&#128247; Photo</h4>
-      <div class="photo-upload-area" id="photo-drop" onclick="document.getElementById('photo-file').click()">
-        <input type="file" id="photo-file" accept="image/*" onchange="previewPhoto(this)">
+      <div class="photo-upload-area" id="photo-drop">
+        <input type="file" id="photo-file" accept="image/*" style="display:none">
         <div class="photo-placeholder" id="photo-placeholder">&#128100;</div>
         <img id="photo-preview-img" class="photo-preview" style="display:none" alt="Photo">
         <div class="photo-hint">Cliquez ou déposez une image (JPG, PNG · max 2 Mo)<br>Format recommandé : carré 400×400 px</div>
@@ -905,6 +905,7 @@ function showEditForm() {
   // Reset photo
   document.getElementById('photo-placeholder').style.display = 'flex';
   document.getElementById('photo-preview-img').style.display  = 'none';
+  setTimeout(initPhotoDrop, 0);
   document.getElementById('no-email-warning').style.display   = 'none';
   document.getElementById('submit-success').style.display     = 'none';
 
@@ -919,16 +920,59 @@ function closeEdit() {
   window.scrollTo(0,0);
 }
 
-function previewPhoto(input) {
-  if (!input.files || !input.files[0]) return;
+function previewPhoto(file) {
+  if (!file) return;
   var reader = new FileReader();
-  reader.onload = function(e) {
-    document.getElementById('photo-preview-img').src = e.target.result;
-    document.getElementById('photo-preview-img').style.display = 'block';
-    document.getElementById('photo-placeholder').style.display  = 'none';
+  reader.onload = function(ev) {
+    var img = document.getElementById('photo-preview-img');
+    var ph  = document.getElementById('photo-placeholder');
+    img.src = ev.target.result;
+    img.style.display = 'block';
+    ph.style.display  = 'none';
     updateProgress();
   };
-  reader.readAsDataURL(input.files[0]);
+  reader.readAsDataURL(file);
+}
+
+function initPhotoDrop() {
+  var drop  = document.getElementById('photo-drop');
+  var input = document.getElementById('photo-file');
+  if (!drop || !input) return;
+
+  /* Cloner le nœud pour supprimer les anciens listeners éventuels */
+  var fresh = input.cloneNode(true);
+  input.parentNode.replaceChild(fresh, input);
+  input = fresh;
+
+  /* Clic sur la zone → ouvre le sélecteur de fichier */
+  drop.onclick = function(e) {
+    if (e.target !== input) input.click();
+  };
+
+  /* Sélection via le dialogue natif */
+  input.addEventListener('change', function() {
+    if (input.files && input.files[0]) previewPhoto(input.files[0]);
+  });
+
+  /* Drag & drop */
+  drop.addEventListener('dragover', function(ev) {
+    ev.preventDefault();
+    drop.style.borderColor = 'var(--accent)';
+    drop.style.background  = '#f0f4ff';
+  });
+  drop.addEventListener('dragleave', function() {
+    drop.style.borderColor = '';
+    drop.style.background  = '';
+  });
+  drop.addEventListener('drop', function(ev) {
+    ev.preventDefault();
+    drop.style.borderColor = '';
+    drop.style.background  = '';
+    var files = ev.dataTransfer.files;
+    if (files && files[0] && files[0].type.startsWith('image/')) {
+      previewPhoto(files[0]);
+    }
+  });
 }
 
 function updateProgress() {
