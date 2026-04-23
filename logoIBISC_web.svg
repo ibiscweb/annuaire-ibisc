@@ -1,0 +1,54 @@
+<?xml version="1.0"
+   viewBox="155 108 455 345" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.0"
+   viewBox="155 108 455 345"
+   width="auto"
+   height="auto"
+   id="svg1668">
+  <defs
+     id="defs1671" />
+  <g
+     transform="matrix(0.551914,0,0,0.512,407.8667,553.7739)"
+     id="g1342">
+    <rect
+       width="759.99969"
+       height="618.99988"
+       x="-416.67737"
+       y="-845.55579"
+       style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect1719" />
+    <path
+       d="M 131.91294,-794.26879 C 69.508705,-800.54234 21.937305,-694.6067 70.922022,-677.09679 C 111.62235,-669.71978 111.9011,-700.56777 98.736813,-714.25921 C 85.122147,-728.41908 64.383675,-742.59121 108.81187,-769.33894 C 159.20104,-799.67544 246.00957,-706.99825 265.59925,-665.2761 C 230.43287,-749.78859 194.31718,-787.99523 131.91294,-794.26879 z M -268.15404,-263.41627 C -216.98123,-448.59042 167.51383,-347.23675 41.96408,-550.68003 C -63.376337,-721.37575 34.010941,-796.25236 97.751492,-799.50003 C 33.604589,-760.56331 -32.848854,-710.61938 97.043052,-540.79356 C 245.31719,-346.93405 -176.12924,-427.17731 -268.15404,-263.41627 z "
+       style="fill:#18447a;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1"
+       id="path1721" />
+    <text
+       x="-391.38638"
+       y="-440.68762"
+       transform="scale(0.983843,1.016422)"
+       style="font-size:307.78039551px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Georgia"
+       id="text1723"
+       xml:space="preserve"><tspan
+         x="-391.38638"
+         y="-440.68762"
+         id="tspan1725">ibi</tspan></text>
+    <text
+       x="174.69493"
+       y="-431.33331"
+       transform="scale(0.960112,1.041545)"
+       style="font-size:294.63317871px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Georgia"
+       id="text1727"
+       xml:space="preserve"><tspan
+         x="174.69493"
+         y="-431.33331"
+         id="tspan1729">c</tspan></text>
+    <path
+       d="M -235.78792,348.13734 A 5.6284666,5.9858298 0 1 1 -235.76635,348.12267"
+       transform="matrix(4.409656,0,0,4.891891,735.5497,-2340.817)"
+       style="fill:#18447a;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path1731" />
+  </g>
+</svg>
